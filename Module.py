@@ -1,22 +1,12 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[2]:
-
-
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
-
-
 import math
 from torch.nn.parameter import Parameter
 from torch.nn import functional as F
-
 from scipy.optimize import brentq
 from scipy.interpolate import interp1d
-
 
 def weights_init(mod):
     """
@@ -37,8 +27,7 @@ def weights_init(mod):
         torch.nn.init.xavier_uniform(mod.weight)
         with torch.no_grad():
             mod.bias.fill_(0.01)
-            
-            
+              
 class Encoder(nn.Module):
     def __init__(self, ngpu, out_z):
         super(Encoder, self).__init__()
@@ -62,7 +51,7 @@ class Encoder(nn.Module):
             nn.Conv1d(32 * 16, out_z, 10, 1, 0, bias=False),
             # state size. (nz) x 1
         )
-
+    
     def forward(self, input):
         if input.is_cuda and self.ngpu > 1:
             output = nn.parallel.data_parallel(self.main, input, range(self.ngpu))
@@ -140,7 +129,7 @@ class MemoryUnit(nn.Module):
         return 'mem_dim={}, fea_dim={}'.format(
             self.mem_dim, self.fea_dim is not None
         )
-
+        
 class MemModule(nn.Module):
     def __init__(self, mem_dim, fea_dim, shrink_thres=0.0025, device='cuda'):
         super(MemModule, self).__init__()
@@ -258,7 +247,7 @@ class Discriminator(nn.Module):
         classifier = classifier.view(-1, 1).squeeze(1)
 
         return classifier, features
-
+        
 class Generator(nn.Module):
 
     def __init__(self, shrink_thres=0.0025,mem_dim=2000):
@@ -274,10 +263,3 @@ class Generator(nn.Module):
         latent_i = latent_dict['output']
         gen_x = self.decoder(latent_i)
         return gen_x, latent_i, att, latent_0
-
-
-# In[ ]:
-
-
-
-
