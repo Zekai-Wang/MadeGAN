@@ -20,6 +20,10 @@ Pandas: 2.0.3
 
 Scikit-learn: 1.2.2
 
+wfdb: 3.4.1
+
+biosppy: 1.0.0
+
 GPU: NVIDIA RTX A4500
 
 ## Citation
